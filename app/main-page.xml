@@ -1,0 +1,58 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+    <ActionBar title="Previsão do Tempo" />
+    
+    <GridLayout rows="auto, *">
+        <StackLayout row="0" class="p-4">
+            <SearchBar hint="Buscar cidade ou CEP..." text="{{ searchQuery }}" submit="{{ onSearchSubmit }}" 
+                      class="mb-4" />
+            
+            <StackLayout class="text-center p-4 bg-blue-100 rounded-lg" visibility="{{ hasWeather ? 'visible' : 'collapsed' }}">
+                <GridLayout columns="*, auto" class="mb-2">
+                    <Label col="0" text="{{ cityName }}" class="text-2xl font-bold" />
+                    <Button col="1" 
+                            text="{{ isFavorite ? '★' : '☆' }}" 
+                            tap="{{ toggleFavorite }}"
+                            class="text-2xl text-yellow-500 bg-transparent border-0" />
+                </GridLayout>
+                <Label text="{{ temperature + '°C' }}" class="text-4xl mb-2" />
+                <Label text="{{ weatherDescription }}" class="text-lg text-gray-600" />
+                <GridLayout columns="*, *" rows="auto" class="mt-4">
+                    <StackLayout col="0" class="text-center">
+                        <Label text="Umidade" class="text-gray-600" />
+                        <Label text="{{ humidity + '%' }}" class="text-lg" />
+                    </StackLayout>
+                    <StackLayout col="1" class="text-center">
+                        <Label text="Sensação" class="text-gray-600" />
+                        <Label text="{{ feelsLike + '°C' }}" class="text-lg" />
+                    </StackLayout>
+                </GridLayout>
+            </StackLayout>
+            
+            <ActivityIndicator busy="{{ isLoading }}" class="m-4" />
+            
+            <Label text="{{ errorMessage }}" 
+                   class="text-red-500 text-center" 
+                   visibility="{{ errorMessage ? 'visible' : 'collapsed' }}" 
+                   textWrap="true" />
+        </StackLayout>
+
+        <ScrollView row="1" class="p-4">
+            <StackLayout>
+                <Label text="Cidades Favoritas" class="text-xl font-bold mb-2" 
+                       visibility="{{ hasFavorites ? 'visible' : 'collapsed' }}" />
+                <ListView items="{{ favorites }}" itemTap="{{ onFavoriteSelect }}" 
+                         visibility="{{ hasFavorites ? 'visible' : 'collapsed' }}">
+                    <ListView.itemTemplate>
+                        <GridLayout columns="*, auto" class="p-2">
+                            <Label col="0" text="{{ name }}" class="text-lg" />
+                            <Button col="1" text="✕" tap="{{ $parent.onRemoveFavorite }}" 
+                                    class="text-red-500 bg-transparent border-0" />
+                        </GridLayout>
+                    </ListView.itemTemplate>
+                </ListView>
+                <Label text="Nenhuma cidade favorita" class="text-gray-500 text-center p-4" 
+                       visibility="{{ hasFavorites ? 'collapsed' : 'visible' }}" />
+            </StackLayout>
+        </ScrollView>
+    </GridLayout>
+</Page>
